@@ -34,6 +34,11 @@ export class TaskController {
     return this.tasksService.findAll(req.user.sub, page - 1, withDeleted);
   }
 
+  @Get('count')
+  count(@Request() req) {
+    return this.tasksService.count(req.user.sub);
+  }
+
   @Get(':id')
   findOne(@Request() req, @Param('id') id: string) {
     return this.tasksService.findOne(req.user.sub, id);

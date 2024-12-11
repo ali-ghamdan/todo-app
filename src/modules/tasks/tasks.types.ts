@@ -1,6 +1,6 @@
 export enum TaskStatus {
-  PENDING = 0,
-  SUCCESS = 1,
-  CANCELED = 2,
-  IN_PROGRESS = 3,
+  PENDING = 1,
+  SUCCESS = 2,
+  CANCELED = 3,
+  IN_PROGRESS = 4,
 }

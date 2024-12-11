@@ -8,7 +8,6 @@ import { Model } from 'mongoose';
 import { Task } from 'src/schemas/task.schema';
 import createTaskDto from './dtos/createTask.dto';
 import updateTaskDto from './dtos/updateTask.dto';
-import { GetTaskStatus } from './tasks.config';
 import { User } from 'src/schemas/user.schema';
 
 @Injectable()
@@ -39,7 +38,7 @@ export class TasksService {
       title: task.title,
       user: task.user,
       description: task.description,
-      status: GetTaskStatus(task.status),
+      status: task.status,
     };
   }
 
@@ -55,7 +54,7 @@ export class TasksService {
       _id: task._id,
       title: task.title,
       description: task.description,
-      status: GetTaskStatus(task.status),
+      status: task.status,
       user: userId,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,
@@ -68,7 +67,7 @@ export class TasksService {
     const tasks = await this.taskModel
       .find({
         user: userId,
-        ...(withDeleted ? {} : { isDeleted: false }),
+        isDeleted: false,
       })
       .skip(page * 10)
       .limit(10)
@@ -78,12 +77,23 @@ export class TasksService {
         _id: task._id,
         title: task.title,
         description: task.description,
-        status: GetTaskStatus(task.status),
+        status: task.status,
         isDeleted: task.isDeleted,
         createdAt: task.createdAt,
         updatedAt: task.updatedAt,
       };
     });
+  }
+
+  async count(userId: string) {
+    return (
+      await this.taskModel
+        .find({
+          user: userId,
+          isDeleted: false,
+        })
+        .lean()
+    ).length;
   }
 
   async findOne(userId: string, _id: string) {
@@ -94,7 +104,7 @@ export class TasksService {
       _id: task._id,
       title: task.title,
       description: task.description,
-      status: GetTaskStatus(task.status),
+      status: task.status,
       isDeleted: task.isDeleted,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,

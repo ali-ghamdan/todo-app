@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/'),
+    MongooseModule.forRoot(process.env.MONGODB),
     AuthModule,
     TasksModule,
     UsersModule,
